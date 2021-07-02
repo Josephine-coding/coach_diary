@@ -36,7 +36,8 @@ def create_text_table(db_connection):
         )'''
     db_connection.execute(query)
 
-def test_add_client(db_connection)
+# Testing query
+def test_add_client(db_connection):
     query = """INSERT INTO client (id_client, name, firstname, information)
         VALUES (0, Doe, John, new client
         )"""
