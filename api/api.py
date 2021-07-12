@@ -14,7 +14,7 @@ models.Base.metadata.create_all(bind=engine)
 # Creating the api
 app = FastAPI()
 
-# first test
+# welcome page
 @app.get('/')
 async def hello():
     return {"Welcome":"Here"}
@@ -52,4 +52,15 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_all_clients(db, skip=skip, limit=limit)
     return users
 
+
+
 ##### TEXT REQUESTS #####
+
+@app.get("/texts/{id_text}", response_model=schemas.Text)
+# Get one text by providing id_text
+def read_text(id_text: int, db: Session = Depends(get_db)):
+    db_text = crud.get_text(db, id_text=id_text)
+    if db_text is None:
+        raise HTTPException(status_code=404, detail="Client not found")
+    return db_text
+
