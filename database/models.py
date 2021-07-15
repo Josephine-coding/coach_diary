@@ -19,7 +19,7 @@ class Text(Base):
     __tablename__ = "text"
     id_text = Column(Integer, primary_key=True, index=True)
     content = Column(String(255))
-    feeling = Column(String(25))
+    feeling = Column(Integer)
     creation_date = Column(DateTime, default=dt.datetime.utcnow)
     modification_date = Column(DateTime, default=dt.datetime.utcnow)
     id_client = Column(Integer, ForeignKey("client.id_client"))

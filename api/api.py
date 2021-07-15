@@ -32,7 +32,7 @@ def get_db():
 
 @app.get("/clients/{id_client}", response_model=schemas.Client)
 # Get one client by providing id_client
-def read_user(id_client: int, db= Depends(get_db)):
+def read_user(id_client: int, db=Depends(get_db)):
     db_user = crud.get_client_by_id(db, id_client=id_client)
     if db_user is None:
         raise HTTPException(status_code=404, detail="Client not found")

@@ -7,12 +7,12 @@ from database import models, schemas
 
 def get_client_by_id(db:Session, id_client:int):
     ''' Query to get one client by providing its id '''
-    return db.query(models.Client).filter(models.Client.id_client == id_client).first
+    return db.query(models.Client).filter(models.Client.id_client == id_client).first()
 
 
 def get_client_by_name(db:Session, name:str):
     ''' Query to get one client by providing its name '''
-    return db.query(models.Client).filter(models.Client.name == name).first
+    return db.query(models.Client).filter(models.Client.name == name).first()
 
 
 def get_all_clients(db:Session, skip: int = 0, limit: int = 100):
@@ -36,7 +36,7 @@ def create_client(db:Session, client):
 
 def delete_client_by_id(db:Session, id:int):
     ''' Query to delete a client by providing its id '''
-    client_to_delete = db.query(models.Client).filter(models.Client.id_customer == id).first()
+    client_to_delete = db.query(models.Client).filter(models.Client.id_client == id).first()
     db.delete(client_to_delete)
     db.commit()
     return "Successfully deleted"
@@ -44,7 +44,7 @@ def delete_client_by_id(db:Session, id:int):
 
 def update_client_by_id(db:Session, id:int, updated_client:dict):
     ''' Query to update a client by providing its id '''
-    client_to_update = db.query(models.Client).filter(models.Client.id_customer == id).first()
+    client_to_update = db.query(models.Client).filter(models.Client.id_client == id).first()
     client_to_update.name = updated_client['name']
     client_to_update.firstname = updated_client['firstname']
     client_to_update.information = updated_client['information']
@@ -71,7 +71,7 @@ def create_text(db: Session, new_text:dict):
 
 def get_text(db:Session, id_text:int):
     ''' Query to get one text by providing its id '''
-    return db.get(models.Text).filter(models.Text.id_text == id_text).first
+    return db.get(models.Text).filter(models.Text.id_text == id_text).first()
 
 
 def get_all_texts_for_one_client(db:Session, id_client:int, skip: int = 0, limit: int = 100):

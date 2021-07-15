@@ -13,7 +13,7 @@ class TextCreate(TextBase):
 class Text(TextBase):
     id_text: int
     id_client: int
-    feeling: str
+    feeling: int
     creation_date: dt.datetime
     modification_date: Optional[dt.datetime] = None
 

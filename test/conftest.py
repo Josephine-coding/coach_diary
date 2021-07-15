@@ -1,7 +1,10 @@
 import pytest
 import asyncio
-from api import models
-from src.utils.mysql_utils import *
+import sys
+sys.path.insert(0, "/home/apprenant/PycharmProjects/coach_diary")
+from api.api import models
+from api.api import get_db
+#from src.utils.mysql_utils import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -18,26 +21,21 @@ def event_loop():
 @pytest.mark.asyncio
 @pytest.fixture(scope='module')
 def session_make():
-    db_connection = connect_to_db(test_database_name)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=db_connection)
-    db = SessionLocal()
+    db = get_db()
     yield db
 
 
 @pytest.mark.asyncio
 @pytest.fixture(scope='module')
 def init_db(event_loop, session_make):
-    mysql_connection = connect_to_mysql()
-    db_cursor = create_db(mysql_connection, test_database_name)
-    db_connection = connect_to_db(test_database_name)
-
+    db_connection = get_db()
     models.Base.metadata.create_all(bind=db_connection)
 
     populate_table = """
     INSERT INTO customer(name,firstname, information)
     VALUES("doe","jane", "test info")
     """
-    db_cursor.execute(populate_table)
+    cursor.execute(populate_table)
     session_make.commit()
 
-    yield db_cursor
+    yield cursor

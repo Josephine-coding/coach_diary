@@ -1,6 +1,9 @@
 import streamlit as st
 import requests
 from datetime import datetime
+from afinn import Afinn
+
+afinn = Afinn()
 
 import sys
 sys.path.insert(0, "/home/apprenant/PycharmProjects/coach_diary")
@@ -30,8 +33,7 @@ if user == 'Coach':
                 client = response.json()
                 st.write('Name: ', client['name'])
                 st.write('Firstname: ', client['firstname'])
-                st.write('Information: ', client['information'])
-                st.write('Creation_date: ', client['creation_date'])
+                st.write('Information: ', client['info'])
 
     elif selection == "create a client":
         #create_a_client()
@@ -59,11 +61,10 @@ if user == 'Coach':
         else:
             clients = response.json()
             for client in clients:
-                st.write('Customer number: ', client['id_customer'])
+                st.write('Customer number: ', client['id_client'])
                 st.write('Name: ', client['name'])
                 st.write('Firstname: ', client['firstname'])
-                st.write('Information: ', client['information'])
-                st.write('Creation_date: ', client['creation_date'])
+                st.write('Information: ', client['info'])
                 st.write('---------------------------------------')
 
     elif selection == 'delete a client':
@@ -83,7 +84,7 @@ if user == 'Coach':
                     st.write('customer deleted')
 
     elif selection == 'update a customer':
-        input_id = st.number_input('enter the customer id to update')
+        input_id = st.number_input('enter the client id to update')
         if input_id > 0:
             input_id = int(input_id)
             #update_one_client_by_id(input_id)
@@ -155,10 +156,12 @@ if user == 'Coach':
 
 elif user == 'Client':
     st.write('Welcome Client')
-    name = st.text_input('Name')
-    firstname = st.text_input('Firstname')
-    if name and firstname:
-        response = requests.get(" http://127.0.0.1:8000/clients/{}".format(name))
+    #name = st.text_input('Name')
+    #firstname = st.text_input('Firstname')
+    input_id = st.number_input('What is your id?')
+    input_id = int(input_id)
+    if input_id:
+        response = requests.get(" http://127.0.0.1:8000/clients/{}".format(input_id))
         if not response:
             st.write('Customer not found')
         else:
@@ -175,14 +178,14 @@ elif user == 'Client':
                 text = st.text_input('')
                 if text:
                     if st.button('save text'):
-                        score = afinn.score(text)
-                        feeling = "positif" if score > 0 else "négatif"
+                        feeling = afinn.score(text)
+                        #feeling = "positif" if score > 0 else "négatif"
                         new_text = {
                             'content': text,
-                            'creation_date': datetime.today().strftime('%Y-%m-%d'),
+                            'id_client': input_id,
                             'feeling': feeling,
-                            'score': score,
-                            'id_customer': id_customer
+                            'creation_date': datetime.today().strftime('%Y-%m-%d'),
+                            'modification_date': datetime.today().strftime('%Y-%m-%d')
                         }
 
                         # call api to create text in db
@@ -195,7 +198,7 @@ elif user == 'Client':
 
             elif selection == "Display list of texts":
                 #display_all_text_by_cust(customer['id_customer'])
-                response = requests.get(" http://127.0.0.1:8000/texts/all/{}".format(id_customer))
+                response = requests.get(" http://127.0.0.1:8000/texts/all/{}".format(input_id))
                 if not response:
                     st.write('No text!')
                 else:
@@ -203,7 +206,7 @@ elif user == 'Client':
                     if len(texts) > 0:
                         for text in texts:
                             # call to api to get the customer writer of thoses texts
-                            result = requests.get(" http://127.0.0.1:8000/clients/{}".format(text['id_customer']))
+                            result = requests.get(" http://127.0.0.1:8000/clients/{}".format(text['input_id']))
                             if not result:
                                 st.write('No writer')
                             else:
