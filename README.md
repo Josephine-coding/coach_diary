@@ -10,7 +10,7 @@ https://docs.google.com/spreadsheets/d/18OjktjL0UNmBUXAV2fcbG5-AGhNaoemgDJV8UNP3
 
 
 ## Files structure
-
+```
 .
 ├── api                     # api files 
     ├── api                 # Contains api requests
@@ -28,3 +28,4 @@ https://docs.google.com/spreadsheets/d/18OjktjL0UNmBUXAV2fcbG5-AGhNaoemgDJV8UNP3
 ├── test                    # Automated tests 
     └── conftest            # Define testing environment  
     └── test_api            # Define test of api
+```
